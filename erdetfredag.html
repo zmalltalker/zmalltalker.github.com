@@ -1,15 +1,20 @@
 <html>
     <head>
         <script type="text/javascript">
+         function erDetXDag(dag){
+             var days = ["søndag","mandag","tirsdag","onsdag","torsdag","fredag","lørdag"];
+             var d = new Date().getDay();
+             var idx = days.indexOf(dag);
+             console.log("Current day is " + d + ", expecting " + idx);
+             if (idx == -1){
+                 return "vet ikke";
+             } else {
+                 return (idx == d) ? "Ja" : "Nei";
+             }
+         };
          function inject(){
              let a = document.getElementById("answer");
-             var d = new Date().getDay();
-             var text = "";
-             if (d == 5){
-                 text = "Ja";
-             } else {
-                 text = "Nei";
-             }
+             var text = erDetXDag("fredag");
              a.innerHTML = text;
 
          }

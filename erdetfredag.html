@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <script type="text/javascript">
+         function inject(){
+             let a = document.getElementById("answer");
+             var d = new Date().getDay();
+             var text = "";
+             if (d == 5){
+                 text = "Ja";
+             } else {
+                 text = "Nei";
+             }
+             a.innerHTML = text;
+
+         }
+        </script>
+    </head>
+    <body>
+        <h1>Er det fredag?</h1>
+        <p id="answer">
+        </p>
+    </body>
+    <script type="text/javascript">
+        inject();
+    </script>
+</html>

@@ -1,0 +1,69 @@
+<?xml-stylesheet type="text/css" href="logo.css" ?>
+
+<svg width="1400" height="1400" xmlns="http://www.w3.org/2000/svg">
+  <!--
+      Experiment with simpler rotated layout.
+      Draw 5 crossings (white on black). One extra for animations :-P
+      Then rotate these -45 degrees around center of collection
+      At the bottom draw a black rectangle
+      Animations enabled on elements with the black_animated CSS class
+      Animations toggled by clicking on image
+  -->
+  <style type="text/css"><![CDATA[
+.black_simple {
+    fill: #fff;
+}
+.black_animated {
+    animation: slide_logo 1s ease alternate infinite;
+}
+.black_animated:nth-child(1){
+    animation-delay: 0.1s;
+}
+.black_animated:nth-child(2){
+    animation-delay: 0.2s;
+}
+
+.black_animated:nth-child(3){
+    animation-delay: 0.3s;
+}
+.black_animated:nth-child(4){
+    animation-delay: 0.4s;
+}
+.black_animated:nth-child(5){
+    animation-delay: 0.5s;
+}
+
+
+@keyframes slide_logo {
+    0% {transform: translateX(0px)}
+    100% {transform: translateX(-15px)}
+}
+
+]]>
+  </style>
+  <g id="logo-container">
+    <rect width="160" height="160" x="93" y="52" stroke="#000" fill="#000"/>
+    <g id="logo" transform="rotate(-45,137,167)">
+      <path d="M100 100 L125 100 L125 235 L100 235 L100 100" class="black_simple" />
+      <path d="M150 100 L175 100 L175 235 L150 235 L150 100" class="black_simple" />
+      <path d="M200 100 L225 100 L225 235 L200 235 L200 100" class="black_simple" />
+      <path d="M250 100 L275 100 L275 235 L250 235 L250 100" class="black_simple"/>
+      <path d="M300 100 L325 100 L325 235 L300 235 L300 100" class="black_simple" />
+    </g>
+  </g>
+
+    <script type="text/javascript"><![CDATA[
+    var c = document.getElementById("logo-container");
+    c.onclick = function(e){
+    let elements = document.getElementsByClassName("black_simple");
+    for (i = 0; i < elements.length; i++) {
+    let el = elements[i];
+    if (el.classList.contains("black_animated")){
+    el.classList.remove("black_animated");
+    } else {
+    el.classList.add("black_animated");
+    }
+    }
+    };
+  ]]></script>
+</svg>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Logo bonanza</title>
+        <script type="text/javascript">
+         function swap(){
+             let logo = document.getElementById("logo");
+             let svg = logo.contentDocument;
+             let elements = svg.getElementsByClassName("black_simple");
+             for (i = 0; i < elements.length; i++){
+                 let element = elements[i];
+                 if (element.classList.contains("black_animated")){
+                     element.classList.remove("black_animated");
+                 } else {
+                     element.classList.add("black_animated");
+                 }
+             }
+         }
+        </script>
+        <style type="text/css">
+         body {
+             margin: 0;
+             padding: 0;
+         }
+        </style>
+    </head>
+    <body>
+        <h1>Look at this logo</h1>
+        <object data="images/shortcut-logo-bonanza.svg" id="logo" type="image/svg+xml"></object>
+        <button onclick="swap()">Swap colors</button>
+
+    </body>
+</html>

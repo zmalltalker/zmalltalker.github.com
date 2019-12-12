@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <script type="text/javascript">
+         function isPrime(num){
+             let max = num;
+             for (i = 2; i < max; i++){
+                 if ((num % i) == 0){
+                     console.log(num + " is divisible by " + i);
+                     return false;
+                 }
+             }
+             return true;
+         };
+         function check_prime(){
+             let input = document.getElementById("prime_candidate").value;
+             let output = document.getElementById("result");
+             output.innerHTML = "";
+             if (input < 1) return;
+             if (isPrime(input)){
+                 output.innerHTML = input + " er et primtall";
+             } else {
+                 output.innerHTML = input + " er ikke et primtall";
+             }
+         }
+        </script>
+    </head>
+    <body>
+        <h2>Miriams primtall-kalkulator</h2>
+        <div>
+            <p>
+                <label for="prime_candidate">Skriv inn tallet for å sjekke om det er et primtall</label>
+            </p>
+            <p>
+                <input id="prime_candidate"/>
+            </p>
+            <p>
+                <input type="button" value="Sjekk" onclick="check_prime()"/>
+            </p>
+        </div>
+        <div id="result"></div>
+    </body>
+</html>

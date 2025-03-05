@@ -1,29 +1,216 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>zmalltalker's page</title>
-	
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zmalltalker's terminal</title>
+  <style>
+    :root {
+      --bg-color: #0D1117;
+      --text-color: #E6EDF3;
+      --accent: #58A6FF;
+      --secondary: #30363D;
+      --success: #3FB950;
+      --warning: #F7B955;
+      --error: #F85149;
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    
+    .terminal {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid var(--secondary);
+      border-radius: 8px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .prompt {
+      color: var(--success);
+      font-weight: bold;
+    }
+    
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: var(--text-color);
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    
+    h1, h2, h3 {
+      color: var(--accent);
+      border-bottom: 1px solid var(--secondary);
+      padding-bottom: 0.5rem;
+    }
+    
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--accent);
+      transition: all 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--warning);
+      border-color: var(--warning);
+    }
+    
+    ul {
+      list-style-type: none;
+      padding-left: 1rem;
+    }
+    
+    li {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    
+    li::before {
+      content: ">";
+      color: var(--accent);
+      position: absolute;
+      left: -1rem;
+    }
+    
+    .ascii-art {
+      font-family: monospace;
+      white-space: pre;
+      line-height: 1.2;
+      margin: 2rem 0;
+      color: var(--accent);
+    }
+    
+    .typewriter {
+      overflow: hidden;
+      border-right: .15em solid var(--accent);
+      white-space: nowrap;
+      margin: 0;
+      animation: 
+        typing 3.5s steps(40, end),
+        blink-caret .75s step-end infinite;
+    }
+    
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--accent); }
+    }
+    
+    .command {
+      color: var(--warning);
+      font-style: italic;
+    }
+    
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.05;
+    }
+  </style>
 </head>
-
 <body>
-<h1>Yay!</h1>
+  <canvas id="matrix" class="matrix-bg"></canvas>
+  
+  <div class="terminal">
+    <div class="ascii-art">
+   _____           _ _ _        _ _             
+  |__  /_ __ ___  | | | |_ __ _| | | _____ _ __ 
+    / /| '_ ` _ \ | | | __/ _` | | |/ / _ \ '__|
+   / /_| | | | | || | | || (_| | |   <  __/ |   
+  /____|_| |_| |_||_|_|\__\__,_|_|_|\_\___|_|   
+                                                
+    </div>
+    
+    <p><span class="prompt">visitor@zmalltalker:~$</span> whoami</p>
+    
+    <h1 class="typewriter">Hello, World!</h1>
+    
+    <p>I'm a developer at <a href="http://shortcut.no/">Shortcut</a>, where I build cool stuff with code.</p>
+    
+    <p><span class="prompt">visitor@zmalltalker:~$</span> ls -la projects/</p>
+    
+    <h2>Experiments & Projects</h2>
+    <ul>
+      <li>
+        <a href="http://yr-api.appspot.com/Norge/Akershus/Nesodden/Fjordvangen.svg">Weather API (SVG format)</a> <span class="command">// Real-time weather data where I live</span>
+      </li>
+      <li>
+        <a href="http://tameghjem.shortcut.no/reis/03010049/02160240">Ferry Schedule</a> <span class="command">// Next ferry home tracker</span>
+      </li>
+      <li>
+        <a href="primes.html">Prime Calculator</a> <span class="command">// Mathematical experiments</span>
+      </li>
+    </ul>
+    
+    <p><span class="prompt">visitor@zmalltalker:~$</span> <span class="cursor"></span></p>
+  </div>
 
-
-<p>
-  I work for <a href="http://shortcut.no/">Shortcut</a>
-</p>
-
-<h2>Some of my (experimental) stuff</h2>
-<ul>
-  <li>
-    <a href="http://yr-api.appspot.com/Norge/Akershus/Nesodden/Fjordvangen.svg">The weather where I live, svg format</a>
-  </li>
-  <li>
-    <a href="http://tameghjem.shortcut.no/reis/03010049/02160240">Next ferry home</a>
-  </li>
-</ul>
-
+  <script>
+    // Matrix rain effect
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+    
+    function draw() {
+      ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#3FB950';
+      ctx.font = `${fontSize}px monospace`;
+      
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        
+        drops[i]++;
+      }
+    }
+    
+    setInterval(draw, 33);
+    
+    // Resize canvas on window resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </body>
 </html>

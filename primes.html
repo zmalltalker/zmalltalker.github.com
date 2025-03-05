@@ -1,43 +1,222 @@
-<!doctype html>
-<html>
-    <head>
-        <script type="text/javascript">
-         function isPrime(num){
-             let max = num;
-             for (i = 2; i < max; i++){
-                 if ((num % i) == 0){
-                     console.log(num + " is divisible by " + i);
-                     return false;
-                 }
-             }
-             return true;
-         };
-         function check_prime(){
-             let input = document.getElementById("prime_candidate").value;
-             let output = document.getElementById("result");
-             output.innerHTML = "";
-             if (input < 1) return;
-             if (isPrime(input)){
-                 output.innerHTML = input + " er et primtall";
-             } else {
-                 output.innerHTML = input + " er ikke et primtall";
-             }
-         }
-        </script>
-    </head>
-    <body>
-        <h2>Miriams primtall-kalkulator</h2>
-        <div>
-            <p>
-                <label for="prime_candidate">Skriv inn tallet for å sjekke om det er et primtall</label>
-            </p>
-            <p>
-                <input id="prime_candidate"/>
-            </p>
-            <p>
-                <input type="button" value="Sjekk" onclick="check_prime()"/>
-            </p>
-        </div>
-        <div id="result"></div>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prime Calculator</title>
+  <style>
+    :root {
+      --bg-color: #0D1117;
+      --text-color: #E6EDF3;
+      --accent: #58A6FF;
+      --secondary: #30363D;
+      --success: #3FB950;
+      --warning: #F7B955;
+      --error: #F85149;
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    
+    .terminal {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid var(--secondary);
+      border-radius: 8px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .prompt {
+      color: var(--success);
+      font-weight: bold;
+    }
+    
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: var(--text-color);
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    
+    h1, h2, h3 {
+      color: var(--accent);
+      border-bottom: 1px solid var(--secondary);
+      padding-bottom: 0.5rem;
+    }
+    
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--accent);
+      transition: all 0.2s ease;
+    }
+    
+    a:hover {
+      color: var(--warning);
+      border-color: var(--warning);
+    }
+    
+    input[type="text"], input[type="number"] {
+      background-color: var(--secondary);
+      border: 1px solid var(--accent);
+      color: var(--text-color);
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    input[type="button"] {
+      background-color: var(--accent);
+      color: var(--bg-color);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    
+    input[type="button"]:hover {
+      background-color: var(--warning);
+    }
+    
+    #result {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-left: 3px solid var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+    
+    .command {
+      color: var(--warning);
+      font-style: italic;
+    }
+    
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.05;
+    }
+  </style>
+  <script type="text/javascript">
+    function isPrime(num) {
+      if (num <= 1) return false;
+      if (num <= 3) return true;
+      if (num % 2 === 0 || num % 3 === 0) return false;
+      
+      let i = 5;
+      while (i * i <= num) {
+        if (num % i === 0 || num % (i + 2) === 0) return false;
+        i += 6;
+      }
+      return true;
+    }
+    
+    function check_prime() {
+      let input = document.getElementById("prime_candidate").value;
+      let output = document.getElementById("result");
+      output.innerHTML = "";
+      
+      if (input < 1) return;
+      
+      if (isPrime(input)) {
+        output.innerHTML = input + " er et primtall";
+      } else {
+        output.innerHTML = input + " er ikke et primtall";
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="matrix" class="matrix-bg"></canvas>
+  
+  <div class="terminal">
+    <h1>Miriams primtall-kalkulator</h1>
+    
+    <p><span class="prompt">visitor@zmalltalker:~$</span> ./prime-calculator</p>
+    
+    <div>
+      <p>
+        <label for="prime_candidate">Skriv inn tallet for å sjekke om det er et primtall</label>
+      </p>
+      <p>
+        <input type="number" id="prime_candidate"/>
+      </p>
+      <p>
+        <input type="button" value="Sjekk" onclick="check_prime()"/>
+      </p>
+    </div>
+    
+    <div id="result"></div>
+    
+    <p><span class="prompt">visitor@zmalltalker:~$</span> <a href="index.html">cd ..</a></p>
+    
+    <p><span class="prompt">visitor@zmalltalker:~$</span> <span class="cursor"></span></p>
+  </div>
+
+  <script>
+    // Matrix rain effect
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
+    }
+    
+    function draw() {
+      ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#3FB950';
+      ctx.font = `${fontSize}px monospace`;
+      
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        
+        drops[i]++;
+      }
+    }
+    
+    setInterval(draw, 33);
+    
+    // Resize canvas on window resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
 </html>

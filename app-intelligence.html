@@ -57,9 +57,17 @@
         }
         
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-size: 24px;
             font-weight: 700;
             color: var(--shortcut-blue);
+        }
+        
+        .logo img {
+            height: 32px;
+            width: auto;
         }
         
         .logo .ai-text {
@@ -752,7 +760,10 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">Shortcut <span class="ai-text">App Intelligence</span></div>
+                <div class="logo">
+                    <img src="https://cdn.prod.website-files.com/668666efa9b270760c96756d/66867cee8fe83d388c27fb1b_Vectors-Wrapper.svg" alt="Shortcut" />
+                    <span class="ai-text">App Intelligence</span>
+                </div>
                 <nav>
                     <a href="#experience">Our Advantage</a>
                     <a href="#features">Our Superpowers</a>

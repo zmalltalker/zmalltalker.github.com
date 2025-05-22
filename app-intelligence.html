@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortcut App Intelligence - Mobile Development Reimagined</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --shortcut-blue: #1a365d;
+            --shortcut-light-blue: #2b77ad;
+            --shortcut-dark: #0f1419;
+            --shortcut-gray: #718096;
+            --shortcut-light-gray: #f7fafc;
+            --ai-gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --ai-gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --ai-gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --ai-accent: #9f7aea;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: var(--shortcut-light-gray);
+            color: var(--shortcut-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--shortcut-blue);
+        }
+        
+        .logo .ai-text {
+            background: var(--ai-gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 500;
+        }
+        
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        nav a {
+            color: var(--shortcut-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            scroll-behavior: smooth;
+        }
+        
+        nav a:hover {
+            color: var(--shortcut-blue);
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--shortcut-blue);
+            cursor: pointer;
+        }
+        
+        .mobile-nav {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-nav.active {
+            display: block;
+        }
+        
+        .mobile-nav a {
+            display: block;
+            padding: 15px 20px;
+            color: var(--shortcut-gray);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid #f7fafc;
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-nav a:hover {
+            background-color: var(--shortcut-light-gray);
+            color: var(--shortcut-blue);
+        }
+        
+        .mobile-nav .cta-button {
+            margin: 15px 20px;
+            display: block;
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: var(--ai-gradient-1);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: var(--ai-gradient-3);
+            opacity: 0.1;
+            border-radius: 50% 0% 50% 0%;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: var(--shortcut-dark);
+        }
+        
+        .hero-text .highlight {
+            background: var(--ai-gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--shortcut-gray);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+        
+        .stat .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--ai-gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+        
+        .stat .label {
+            color: var(--shortcut-gray);
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .hero-visual {
+            position: relative;
+        }
+        
+        .floating-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--ai-gradient-1);
+            border-radius: 18px;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .section {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .section:nth-child(even) {
+            background: var(--shortcut-light-gray);
+        }
+        
+        .section h2 {
+            text-align: center;
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--shortcut-dark);
+        }
+        
+        .section .subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--shortcut-gray);
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .feature {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+        
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--ai-gradient-1);
+            border-radius: 20px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--shortcut-dark);
+        }
+        
+        .feature p {
+            color: var(--shortcut-gray);
+            line-height: 1.6;
+        }
+        
+        .ai-tools-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 60px;
+            align-items: start;
+        }
+        
+        .tools-list {
+            position: relative;
+        }
+        
+        .tools-list::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            bottom: 30px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--ai-accent), transparent);
+            z-index: 1;
+        }
+        
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .tool-item.active {
+            transform: translateX(10px);
+        }
+        
+        .tool-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--ai-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(159, 122, 234, 0.4);
+        }
+        
+        .tool-item.active .tool-dot {
+            background: var(--shortcut-blue);
+            transform: scale(1.2);
+            box-shadow: 0 6px 20px rgba(26, 54, 93, 0.6);
+        }
+        
+        .tool-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--shortcut-dark);
+            transition: color 0.3s ease;
+        }
+        
+        .tool-item.active .tool-label {
+            color: var(--shortcut-blue);
+        }
+        
+        .tool-display {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            height: 450px;
+            overflow: hidden;
+        }
+        
+        .tool-display-content {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .tool-display-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .tool-visual {
+            margin-bottom: 30px;
+        }
+        
+        .tool-visual img {
+            width: 240px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-content h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--shortcut-dark);
+            background: var(--ai-gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tool-content p {
+            color: var(--shortcut-gray);
+            line-height: 1.6;
+            font-size: 1rem;
+            max-width: 100%;
+        }
+        
+        .packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .package {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .package:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .package.featured {
+            position: relative;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .package.featured::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--ai-gradient-1);
+            border-radius: 22px;
+            z-index: -1;
+        }
+        
+        .package.featured:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .package h3 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--shortcut-dark);
+        }
+        
+        .package .subtitle {
+            color: var(--shortcut-gray);
+            margin-bottom: 24px;
+            font-size: 1rem;
+            text-align: left;
+        }
+        
+        .price-highlight {
+            background: var(--ai-gradient-1);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 24px 0;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .price-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .price-note {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .package ul {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .package li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 28px;
+            color: var(--shortcut-gray);
+        }
+        
+        .package li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--ai-accent);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .package .ideal-for {
+            background: var(--shortcut-light-gray);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+        
+        .package .cta-button {
+            background: var(--ai-gradient-1);
+            color: white;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+        
+        .package .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .package.featured .cta-button {
+            background: white;
+            color: var(--shortcut-blue);
+            border: 2px solid var(--shortcut-blue);
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.2);
+        }
+        
+        .package.featured .cta-button:hover {
+            background: var(--shortcut-blue);
+            color: white;
+            box-shadow: 0 8px 25px rgba(26, 54, 93, 0.4);
+        }
+        
+        .traditional-link {
+            background: linear-gradient(135deg, var(--shortcut-light-gray) 0%, white 100%);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 60px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .traditional-link h3 {
+            color: var(--shortcut-blue);
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+        
+        .traditional-link .cta-button {
+            background: white;
+            color: var(--shortcut-blue);
+            border: 2px solid var(--shortcut-blue);
+            box-shadow: none;
+        }
+        
+        .traditional-link .cta-button:hover {
+            background: var(--shortcut-blue);
+            color: white;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 100px 0;
+            background: var(--ai-gradient-1);
+            color: white;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .cta-section p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-section .cta-button {
+            background: white;
+            color: var(--shortcut-blue);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-section .disclaimer {
+            margin-top: 50px;
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+        
+        footer {
+            padding: 60px 0;
+            text-align: center;
+            color: var(--shortcut-gray);
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .packages {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-tools-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .tool-display {
+                height: auto;
+                min-height: 500px;
+            }
+            
+            .tool-display-content {
+                position: relative;
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .tool-visual {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .tool-visual img {
+                width: 100%;
+                max-width: 280px;
+                height: auto;
+            }
+            
+            nav {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Shortcut <span class="ai-text">App Intelligence</span></div>
+                <nav>
+                    <a href="#experience">Experience</a>
+                    <a href="#features">AI Tools</a>
+                    <a href="#packages">Packages</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+                <a href="#packages" class="cta-button">Get Started</a>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            </div>
+            <div class="mobile-nav" id="mobileNav">
+                <a href="#experience" onclick="closeMobileMenu()">Experience</a>
+                <a href="#features" onclick="closeMobileMenu()">AI Tools</a>
+                <a href="#packages" onclick="closeMobileMenu()">Packages</a>
+                <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+                <a href="#packages" class="cta-button" onclick="closeMobileMenu()">Get Started</a>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1><span class="highlight">18 Years</span> of Mobile Expertise<br>Just Got Supercharged by AI</h1>
+                    <p>Shortcut's App Intelligence combines nearly two decades of hands-on mobile development experience with revolutionary AI tools to deliver production-ready iOS and Android apps at unprecedented speed.</p>
+                    <a href="#packages" class="cta-button" style="font-size: 1.1rem; padding: 16px 32px;">Explore App Intelligence</a>
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="number">18</span>
+                                <div class="label">Years Experience</div>
+                            </div>
+                            <div class="stat">
+                                <span class="number">1000+</span>
+                                <div class="label">Apps Built</div>
+                            </div>
+                            <div class="stat">
+                                <span class="number">4-8</span>
+                                <div class="label">Weeks to Market</div>
+                            </div>
+                            <div class="stat">
+                                <span class="number">100%</span>
+                                <div class="label">Fixed Pricing</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="experience">
+        <div class="container">
+            <h2>Human Expertise + AI Advantage</h2>
+            <p class="subtitle">18 years of building world-class mobile apps, now accelerated by AI we've built specifically for mobile development</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Battle-Tested Experience</h3>
+                    <p>Nearly two decades creating mobile apps across every industry and platform. We've seen every challenge, solved every problem, and know what works in production.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🧠</div>
+                    <h3>AI-Human Collaboration</h3>
+                    <p>Our custom AI tools don't replace human judgment—they amplify it. Experienced developers guide every decision while AI handles the heavy lifting.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Speed Without Compromise</h3>
+                    <p>Traditional quality and reliability delivered at AI-accelerated speeds. We've eliminated bottlenecks, not craftsmanship.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Production-Ready Architecture</h3>
+                    <p>Every app we build uses the architectural patterns and best practices learned from 1000+ successful projects—not experimental code.</p>
+                </div>
+            </div>
+            
+            <div class="traditional-link">
+                <h3>Need Traditional Development?</h3>
+                <p style="margin-bottom: 24px;">For complex enterprise projects, regulated industries, or when you prefer our established development process, our traditional custom development services remain available.</p>
+                <a href="https://shortcut.io" target="_blank" class="cta-button">
+                    Learn About Traditional Development →
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="features">
+        <div class="container">
+            <h2>Our Custom-Built AI Tools</h2>
+            <p class="subtitle">18 years of mobile development insights, codified into specialized AI systems</p>
+            
+            <div class="ai-tools-container">
+                <div class="tools-list">
+                    <div class="tool-item active" data-tool="craft">
+                        <div class="tool-dot">1</div>
+                        <div class="tool-label">Smart Specification</div>
+                    </div>
+                    
+                    <div class="tool-item" data-tool="ui-generator">
+                        <div class="tool-dot">2</div>
+                        <div class="tool-label">Natural Language UI Generator</div>
+                    </div>
+                    
+                    <div class="tool-item" data-tool="integration">
+                        <div class="tool-dot">3</div>
+                        <div class="tool-label">SDK & API Integration Engine</div>
+                    </div>
+                    
+                    <div class="tool-item" data-tool="architecture">
+                        <div class="tool-dot">4</div>
+                        <div class="tool-label">Automated Project Architecture</div>
+                    </div>
+                    
+                    <div class="tool-item" data-tool="deployment">
+                        <div class="tool-dot">5</div>
+                        <div class="tool-label">Rapid Deployment Pipeline</div>
+                    </div>
+                </div>
+                
+                <div class="tool-display">
+                    <div id="tool-craft" class="tool-display-content active">
+                        <div class="tool-visual">
+                            <img src="/api/placeholder/280/200" alt="Smart Specification Tool" />
+                        </div>
+                        <div class="tool-content">
+                            <h3>craft.shortcut.dev</h3>
+                            <p>AI-powered specification engine trained on thousands of successful projects. Systematically captures requirements through intelligent questioning, preventing scope creep and ensuring nothing is overlooked.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="tool-ui-generator" class="tool-display-content">
+                        <div class="tool-visual">
+                            <img src="/api/placeholder/280/200" alt="UI Generator Tool" />
+                        </div>
+                        <div class="tool-content">
+                            <h3>Natural Language UI Generator</h3>
+                            <p>Describe your interface in plain English and watch experienced developers' knowledge translated into functional SwiftUI code. Compiles and displays in real-time—no wireframes needed.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="tool-integration" class="tool-display-content">
+                        <div class="tool-visual">
+                            <img src="/api/placeholder/280/200" alt="Integration Engine Tool" />
+                        </div>
+                        <div class="tool-content">
+                            <h3>SDK & API Integration Engine</h3>
+                            <p>Combines 18 years of integration experience with AI analysis of SDK headers and OpenAPI specs. Generates battle-tested integration patterns—even for brand-new technologies.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="tool-architecture" class="tool-display-content">
+                        <div class="tool-visual">
+                            <img src="/api/placeholder/280/200" alt="Architecture Tool" />
+                        </div>
+                        <div class="tool-content">
+                            <h3>Automated Project Architecture</h3>
+                            <p>Exports complete, organized codebases using architectural patterns proven across 1000+ successful apps. Production-ready structure from day one.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="tool-deployment" class="tool-display-content">
+                        <div class="tool-visual">
+                            <img src="/api/placeholder/280/200" alt="Deployment Pipeline Tool" />
+                        </div>
+                        <div class="tool-content">
+                            <h3>Rapid Deployment Pipeline</h3>
+                            <p>Automated CI/CD pipelines with app store optimization, beta testing workflows, and production monitoring. From code to customer hands in record time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="how-it-works">
+        <div class="container">
+            <h2>Experience Meets Innovation</h2>
+            <p class="subtitle">We've taken 18 years of mobile development expertise and built AI tools that embody our hard-earned knowledge. The result? Lightning-fast development without sacrificing the quality that comes from decades of experience.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>AI-Guided Requirements</h3>
+                    <p>Our specification engine asks the questions we've learned to ask over 1000+ projects. No missed requirements, no scope creep, no surprises.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Expert-Grade Code Generation</h3>
+                    <p>AI writes the code, but using the patterns, practices, and architecture decisions that senior developers would make. Quality at machine speed.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Battle-Tested Integrations</h3>
+                    <p>Our AI doesn't guess at integrations—it applies proven patterns from thousands of successful API and SDK implementations.</p>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">🏗️</div>
+                    <h3>Production-Ready from Day One</h3>
+                    <p>Every generated app uses the same architectural foundations that have powered successful apps for nearly two decades.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="packages">
+        <div class="container">
+            <h2>Choose Your Path to Market</h2>
+            <p class="subtitle">Fixed-price packages designed for different stages of your app journey</p>
+            
+            <div class="packages">
+                <div class="package">
+                    <h3>Concept Validator</h3>
+                    <p class="subtitle">Perfect for testing technical feasibility</p>
+                    
+                    <div class="price-highlight">
+                        <div class="price-label">Fixed Price</div>
+                        <div class="price-amount">€10,000</div>
+                        <div class="price-note">(starting from)</div>
+                    </div>
+                    
+                    <ul>
+                        <li>AI-powered specification and scoping</li>
+                        <li>Functional prototype development</li>
+                        <li>Core feature validation</li>
+                        <li>Technical feasibility assessment</li>
+                        <li>1-2 week delivery</li>
+                    </ul>
+                    <div class="ideal-for">
+                        <p><strong>Ideal for:</strong> Startups testing concepts, preparing investor demos, validating technical approaches before full development.</p>
+                    </div>
+                    
+                    <a href="mailto:hello@shortcut.io?subject=Concept Validator - Ready to Order&body=Hi! I'm interested in ordering the Concept Validator package for €10,000. Please contact me to get started.%0A%0AProject details:%0A- Project name:%0A- Brief description:%0A- Preferred start date:%0A- Contact information:" class="cta-button">
+                        Order Concept Validator
+                    </a>
+                </div>
+                
+                <div class="package featured">
+                    <h3>Market Ready MVP</h3>
+                    <p class="subtitle">Launch-ready apps for immediate market entry</p>
+                    
+                    <div class="price-highlight">
+                        <div class="price-label">Fixed Price</div>
+                        <div class="price-amount">€50,000</div>
+                        <div class="price-note">(starting from)</div>
+                    </div>
+                    
+                    <ul>
+                        <li>Complete MVP development (iOS or Android)</li>
+                        <li>App store submission support</li>
+                        <li>Essential integrations (payments, analytics)</li>
+                        <li>4-6 week delivery</li>
+                        <li>Basic user authentication</li>
+                    </ul>
+                    <div class="ideal-for">
+                        <p><strong>Ideal for:</strong> Funded startups ready to launch, companies seeking rapid market entry, teams needing production apps quickly.</p>
+                    </div>
+                    
+                    <a href="https://craft.shortcut.dev/mvp-scope" target="_blank" class="cta-button">
+                        Get Your Fixed Price Today
+                    </a>
+                    <p style="text-align: center; color: var(--shortcut-gray); font-size: 0.9rem; margin-top: 12px; line-height: 1.4;">
+                        We'll ask you 5 questions and provide a fixed price by the end of the day
+                    </p>
+                </div>
+                
+                <div class="package">
+                    <h3>Enterprise Launch</h3>
+                    <p class="subtitle">Full-scale apps for established companies</p>
+                    
+                    <div class="price-highlight">
+                        <div class="price-label">Fixed Price</div>
+                        <div class="price-amount">€80,000</div>
+                        <div class="price-note">(starting from)</div>
+                    </div>
+                    
+                    <ul>
+                        <li>Cross-platform development (iOS + Android)</li>
+                        <li>Advanced integrations and APIs</li>
+                        <li>Custom backend development</li>
+                        <li>Enterprise security features</li>
+                        <li>6-10 week delivery</li>
+                        <li>Professional support package</li>
+                    </ul>
+                    <div class="ideal-for">
+                        <p><strong>Ideal for:</strong> Established companies, organizations with complex requirements, projects needing enterprise-level quality and support.</p>
+                    </div>
+                    
+                    <a href="https://craft.shortcut.dev/enterprise-scope" target="_blank" class="cta-button">
+                        Get Your Fixed Price Today
+                    </a>
+                    <p style="text-align: center; color: var(--shortcut-gray); font-size: 0.9rem; margin-top: 12px; line-height: 1.4;">
+                        We'll ask you 5 questions and provide a fixed price by the end of the day
+                    </p>
+                </div>
+            </div>
+            
+            <div class="traditional-link">
+                <h3>Special: App Modernization</h3>
+                <p style="margin-bottom: 24px;">Transform your existing app with modern SwiftUI/Kotlin while preserving all functionality. Our AI tools rapidly recreate your app using current best practices, eliminating technical debt.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <h2>Ready to Build Your App?</h2>
+            <p>Skip traditional development timelines. Get your mobile app built with cutting-edge AI assistance, backed by 18 years of experience, with fixed pricing and lightning-fast delivery.</p>
+            <a href="mailto:hello@shortcut.io" class="cta-button" style="font-size: 1.2rem; padding: 18px 36px;">Start Your Project</a>
+            
+            <div class="disclaimer">
+                <p>🚫 <strong>Not suitable for:</strong> Regulated industries (finance, healthcare) without custom consultation</p>
+                <p>✅ <strong>Perfect for:</strong> Startups, product companies, and businesses ready to leverage AI-accelerated development</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Shortcut. 18 years of mobile excellence, now AI-accelerated.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toolItems = document.querySelectorAll('.tool-item');
+            const toolContents = document.querySelectorAll('.tool-display-content');
+            
+            toolItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const toolId = this.getAttribute('data-tool');
+                    
+                    // Remove active class from all items and contents
+                    toolItems.forEach(i => i.classList.remove('active'));
+                    toolContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show corresponding content with animation delay
+                    setTimeout(() => {
+                        document.getElementById(`tool-${toolId}`).classList.add('active');
+                    }, 150);
+                });
+            });
+        });
+        
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('active');
+        }
+        
+        function closeMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
